@@ -2,7 +2,7 @@
 
 ## About
 
-This project implements the communication between a Client SMTP to a Server SMTP to send an email.
+This project implements the communication between a Client SMTP to a Server SMTP to send an email using sockets.
 
 ## Technologies
 
