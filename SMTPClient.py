@@ -1,19 +1,24 @@
 from socket import *
+import base64
 import ssl
 
-# Message to send
-msg = '\r\nTEST!'
+
 endmsg = '\r\n.\r\n'
 
 # Choose a mail server (e.g. Google mail server) and call it mailserver
-mailserver = 'smtp.gmail.com'
+mailserver = input('Choose mail server: [type enter to use default (Google Mail Server)]')
+if mailserver == '':
+	mailserver = 'smtp.gmail.com'
+	port = 465
+else:
+	port = int(input(f'Type the port number for {mailserver}: '))
 
 # Create socket called clientSocket and establish a TCP connection with mailserver
 clientSocket = socket(AF_INET, SOCK_STREAM)
 clientSocketSLL = ssl.wrap_socket(clientSocket)
 
 # Port number may change according to the mail server
-clientSocketSLL.connect((mailserver, 465))
+clientSocketSLL.connect((mailserver, port))
 recv = clientSocketSLL.recv(1024)
 print(recv)
 if recv[:3] != bytes('220', 'utf8'):
@@ -36,23 +41,25 @@ if recv[:3] != bytes('334', 'utf8'):
 	print('334 reply not received from server.')
 
 
-login = 'YmFzZTY0bG9naW4=\r\n'
-clientSocketSLL.send(bytes(login, 'utf8'))
+login = base64.b64encode(input('Type your login:').encode('ascii'))
+login += ('\r\n').encode('ascii')
+clientSocketSLL.send(login)
 recv = clientSocketSLL.recv(1024)
 print(recv)
 if recv[:3] != bytes('334', 'utf8'):
 	print('334 reply not received from server.')
 
-
-password = 'YmFzZTY0cGFzc3dvcmQ=\r\n'
-clientSocketSLL.send(bytes(password, 'utf8'))
+password = base64.b64encode(input('Type your password:').encode('ascii'))
+password += ('\r\n').encode('ascii')
+clientSocketSLL.send(password)
 recv = clientSocketSLL.recv(1024)
 print(recv)
 if recv[:3] != bytes('235', 'utf8'):
 	print('235 reply not received from server.')
 
 # Send MAIL FROM command and print server response.
-mailfrom = 'MAIL FROM: <foo@foo.com>\r\n'
+email = input('Type your email: ')
+mailfrom = f'MAIL FROM: <{email}>\r\n'
 clientSocketSLL.send(bytes(mailfrom, 'utf8'))
 recv = clientSocketSLL.recv(1024)
 print(recv)
@@ -61,7 +68,8 @@ if recv[:3] != bytes('250', 'utf8'):
 
 
 # Send RCPT TO command and print server response.
-rcptto = 'RCPT TO: <foo@foo.com>\r\n'
+rcp = input('Type your rcp: ')
+rcptto = f'RCPT TO: <{rcp}>\r\n'
 clientSocketSLL.send(bytes(rcptto, 'utf8'))
 recv = clientSocketSLL.recv(1024)
 print(recv)
@@ -77,7 +85,9 @@ if recv[:3] != bytes('354', 'utf8'):
 	print('354 reply not received from server.')
 
 # Send message data.
-clientSocketSLL.send(bytes('SUBJECT: TEST!\r\n', 'utf8'))
+subject = input('Type subject: ')
+msg = input('Type message: ')
+clientSocketSLL.send(bytes(f'SUBJECT: {subject}\r\n', 'utf8'))
 clientSocketSLL.send(bytes(msg, 'utf8'))
 
 # Message ends with a single period.
