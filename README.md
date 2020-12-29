@@ -26,3 +26,11 @@ After that, you'll need to clone this repo:
 ```
 git clone https://github.com/LBeghini/SMTPClient.py.git
 ``` 
+
+## Running
+
+To run this project, at your ```cmd```, enter:
+
+```
+python SMTPClient.py
+```
