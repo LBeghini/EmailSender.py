@@ -24,7 +24,7 @@ You can turn it off once you finish testing the SMPTClient
 After that, you'll need to clone this repo:
 
 ```
-git clone https://github.com/LBeghini/SMTPClient.py.git
+git clone https://github.com/LBeghini/EmailSender.py.git
 ``` 
 
 ## Running
