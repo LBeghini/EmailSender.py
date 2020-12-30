@@ -1,4 +1,4 @@
-# :mailbox_with_mail: SMTPClient.py
+# :mailbox_with_mail: EmailSender.py
 
 ## About
 
